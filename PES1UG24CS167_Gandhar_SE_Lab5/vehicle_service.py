@@ -8,7 +8,9 @@ SERVICE_RATES = {"Oil Change": 1500, "Wheel Alignment": 800,
 service_records = {}
 
 
-def addService(vehicleNo, serviceType="General", history=[]):
+def addService(vehicleNo, serviceType="General", history=None):
+    if history is None:
+        history = []
     cost = SERVICE_RATES.get(serviceType, 0)
     entry = {"type": serviceType, "cost": cost, "date": str(date.today())}
     service_records.setdefault(vehicleNo, []).append(entry)

@@ -19,9 +19,8 @@ def addService(vehicleNo, serviceType="General", history=None):
 
 
 def cancelService(vehicleNo, serviceType):
-    try:
-        jobs = service_records[vehicleNo]
-    except Exception:
+    jobs = service_records.get(vehicleNo)
+    if jobs is None:
         print("No records for", vehicleNo)
         return False
     remaining = [job for job in jobs if job["type"] != serviceType]

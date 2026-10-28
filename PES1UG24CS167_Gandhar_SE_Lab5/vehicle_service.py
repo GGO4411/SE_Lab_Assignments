@@ -89,4 +89,5 @@ def main():
     print("Vehicles on file:", len(loaded), "| busiest vehicle:", busiest_vehicle())
 
 
-main()
+if __name__ == "__main__":
+    main()

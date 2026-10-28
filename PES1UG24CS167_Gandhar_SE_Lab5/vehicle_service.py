@@ -1,6 +1,7 @@
 import hashlib
 import json
-import subprocess
+import shutil
+from pathlib import Path
 from datetime import date
 
 SERVICE_RATES = {"Oil Change": 1500, "Wheel Alignment": 800,
@@ -58,7 +59,12 @@ def loadRecords(fileName="services.json"):
 
 def backupRecords(folder):
     # Helper kept for the lab: not called by the demo
-    subprocess.call("cp services.json " + folder, shell=True)
+    source = Path("services.json")
+    destination = Path(folder)
+    if not source.is_file():
+        raise FileNotFoundError(f"Record file does not exist: {source}")
+    destination.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination / source.name)
 
 
 def main():

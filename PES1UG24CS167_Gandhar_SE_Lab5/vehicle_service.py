@@ -5,7 +5,6 @@ from datetime import date
 
 SERVICE_RATES = {"Oil Change": 1500, "Wheel Alignment": 800,
                  "General": 2500,"Brake Check": 1200}
-ADMIN_PASSWORD = "garage-demo"
 service_records = {}
 
 

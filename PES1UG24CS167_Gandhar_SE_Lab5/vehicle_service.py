@@ -12,7 +12,9 @@ service_records = {}
 def addService(vehicleNo, serviceType="General", history=None):
     if history is None:
         history = []
-    cost = SERVICE_RATES.get(serviceType, 0)
+    cost = SERVICE_RATES.get(serviceType)
+    if cost is None:
+        raise ValueError(f"Unknown service type: {serviceType}")
     entry = {"type": serviceType, "cost": cost, "date": str(date.today())}
     service_records.setdefault(vehicleNo, []).append(entry)
     history.append(vehicleNo)

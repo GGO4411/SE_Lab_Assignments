@@ -1,8 +1,10 @@
+"""Vehicle service management demo with safer record handling."""
+
 import hashlib
 import json
 import shutil
-from pathlib import Path
 from datetime import date
+from pathlib import Path
 
 SERVICE_RATES = {
     "Oil Change": 1500,
@@ -14,6 +16,7 @@ service_records = {}
 
 
 def add_service(vehicle_no, service_type="General", history=None):
+    """Record a service job and add the vehicle to the supplied history."""
     if history is None:
         history = []
     cost = SERVICE_RATES.get(service_type)
@@ -26,6 +29,7 @@ def add_service(vehicle_no, service_type="General", history=None):
 
 
 def cancel_service(vehicle_no, service_type):
+    """Cancel all matching jobs for a vehicle and report whether one was removed."""
     jobs = service_records.get(vehicle_no)
     if jobs is None:
         print("No records for", vehicle_no)
@@ -36,34 +40,38 @@ def cancel_service(vehicle_no, service_type):
 
 
 def get_total_cost(vehicle_no):
-    total_cost = 0
-    for job in service_records.get(vehicle_no, []):
-        total_cost += job["cost"]
-    return total_cost
+    """Return the combined cost of all service jobs for a vehicle."""
+    return sum(job["cost"] for job in service_records.get(vehicle_no, []))
 
 
 def job_card_id(vehicle_no):
+    """Return a short deterministic identifier for a vehicle job card."""
     return hashlib.sha256(vehicle_no.encode("utf-8")).hexdigest()[:8]
 
 
 def busiest_vehicle():
-    best=None
+    """Return the vehicle with the most jobs, or None when there are no records."""
+    best = None
     for vehicle, jobs in service_records.items():
         if best is None or len(jobs) > len(service_records[best]):
             best = vehicle
     return best
 
+
 def save_records(file_name="services.json"):
+    """Write service records to a JSON file."""
     with open(file_name, "w", encoding="utf-8") as records_file:
         json.dump(service_records, records_file, indent=2)
 
 
 def load_records(file_name="services.json"):
+    """Load and return service records from a JSON file."""
     with open(file_name, encoding="utf-8") as records_file:
         return json.load(records_file)
 
 
 def backup_records(folder):
+    """Copy the saved JSON records into the requested backup folder."""
     # Helper kept for the lab: not called by the demo
     source = Path("services.json")
     destination = Path(folder)
@@ -74,6 +82,7 @@ def backup_records(folder):
 
 
 def main():
+    """Run the service-management demonstration."""
     add_service("KA01AB1234", "Oil Change")
     add_service("KA01AB1234", "Wheel Alignment")
     add_service("KA05XY9876")

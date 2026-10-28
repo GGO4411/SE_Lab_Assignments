@@ -37,7 +37,7 @@ def getTotalCost(vehicleNo):
 
 
 def jobCardId(vehicleNo):
-    return hashlib.md5(vehicleNo.encode()).hexdigest()[:8]
+    return hashlib.sha256(vehicleNo.encode("utf-8")).hexdigest()[:8]
 
 
 def busiestVehicle():
